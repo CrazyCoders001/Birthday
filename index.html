@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, Namrata! You Old Fart! (Just Kidding!)</title>
+    <!-- Favicon - A little party hat! -->
+    <link rel="icon" href="https://placehold.co/32x32/FFD700/8B4513?text=🥳">
+
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Poppins for stylish body text, Dancing Script for festive headings -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" xintegrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0x0ug1iMK10z0k4y+A1y5g4c6/l0k7+a5B/w8f2aL3x5/y9yW7sS/r+w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        /* Custom CSS for base styles and font application */
+        body {
+            font-family: 'Poppins', sans-serif; /* Changed to Poppins for a modern stylish touch */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+        }
+
+        h1, h2 {
+            font-family: 'Dancing Script', cursive; /* Festive font for headings */
+        }
+
+        /* Hero section with a celebratory background (e.g., subtle patterns or warm gradients) */
+        .hero-section {
+            background: linear-gradient(to bottom, rgba(255, 230, 204, 0.9), rgba(255, 215, 0, 0.7)), url('https://images.pexels.com/photos/1036034/pexels-photo-1036034.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2') no-repeat center center/cover;
+            background-size: cover; /* Ensure image covers the whole section */
+            background-position: center; /* Center the image */
+        }
+
+        /* Confetti animation for initial load */
+        .confetti-piece {
+            position: absolute;
+            width: 8px;
+            height: 16px;
+            background-color: var(--confetti-color);
+            opacity: 0;
+            transform: translateY(0) rotate(0deg);
+            animation: fall var(--animation-duration) linear forwards;
+            pointer-events: none; /* Allows clicks to pass through */
+        }
+
+        @keyframes fall {
+            0% { opacity: 0; transform: translateY(-10vh) rotate(0deg); }
+            10% { opacity: 1; }
+            100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
+        }
+
+        /* Modal specific styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .modal-close:hover,
+        .modal-close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Spinner for image loading */
+        .spinner {
+            border: 8px solid #f3f3f3; /* Light grey */
+            border-top: 8px solid #FFD700; /* Gold */
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 2s linear infinite;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            display: none; /* Hidden by default */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Cake and Candle styles */
+        .candle-wrapper {
+            position: relative;
+            width: 100%; /* Takes full width of its container */
+            max-width: 350px; /* Max width for the cake image */
+            margin: 0 auto;
+        }
+
+        .cake-image {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: block; /* Ensure no extra space below image */
+        }
+
+        .candle {
+            width: 15px;
+            height: 60px;
+            background-color: #fff;
+            border-radius: 3px;
+            position: absolute;
+            z-index: 11; /* Ensure candles are above cake image */
+        }
+
+        .wick {
+            width: 2px;
+            height: 8px;
+            background-color: #333;
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 1px;
+        }
+
+        .flame {
+            width: 0; /* Hidden by default */
+            height: 0;
+            background-color: yellow;
+            border-radius: 50%;
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: all 0.3s ease-out;
+            box-shadow: 0 0 10px 5px rgba(255, 255, 0, 0.7), 0 0 20px 10px rgba(255, 165, 0, 0.5);
+            animation: pulse-flame 1.5s infinite alternate;
+        }
+
+        .flame.lit {
+            width: 15px;
+            height: 25px;
+            opacity: 1;
+        }
+
+        @keyframes pulse-flame {
+            0% { transform: translateX(-50%) scale(1); opacity: 1; }
+            50% { transform: translateX(-50%) scale(1.05); opacity: 0.9; }
+            100% { transform: translateX(-50%) scale(1); opacity: 1; }
+        }
+
+        /* New styles for dynamic celebration elements (balloons/strips) */
+        .celebration-element {
+            position: fixed; /* Fixed to viewport */
+            bottom: -100px; /* Start off-screen below */
+            opacity: 0;
+            z-index: 50;
+            pointer-events: none; /* Non-interactive */
+        }
+        .balloon-piece {
+            border-radius: 50%;
+            transition: transform ease-out, opacity ease-out;
+        }
+        .strip-piece {
+            transition: transform ease-out, opacity ease-out;
+            transform-origin: bottom center; /* For better rotation */
+        }
+
+        /* Loading spinner for LLM calls */
+        .llm-spinner {
+            border: 4px solid #f3f3f3; /* Light grey */
+            border-top: 4px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 8px;
+        }
+
+        /* Video Modal Specific Styles */
+        #video-modal .video-container {
+            position: relative;
+            width: 90%; /* Max width for video */
+            max-width: 800px; /* Limit max size */
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            background-color: #000;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        #video-modal .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Photo Item Hover Effect (Bulb On-Off) */
+        .photo-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease-in-out;
+            border: 3px solid transparent; /* Initial transparent border */
+        }
+
+        .photo-item::before {
+            content: '';
+            position: absolute;
+            inset: 0; /* Cover the entire element */
+            border: 3px solid transparent;
+            border-radius: 10px;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out, border-color 0.4s ease-in-out;
+            pointer-events: none; /* Allow clicks on content */
+        }
+
+        .photo-item:hover {
+            transform: scale(1.03);
+        }
+
+        .photo-item:hover::before {
+            opacity: 1;
+            animation: glowing-border 1.5s infinite alternate; /* Bulb on-off effect */
+        }
+
+        @keyframes glowing-border {
+            0% { border-color: #FFD700; box-shadow: 0 0 10px #FFD700; } /* Gold */
+            50% { border-color: #FF69B4; box-shadow: 0 0 20px #FF69B4; } /* Hot Pink */
+            100% { border-color: #00FFFF; box-shadow: 0 0 10px #00FFFF; } /* Cyan */
+        }
+    </style>
+</head>
+<body class="bg-amber-50 text-gray-800">
+
+    <!-- Confetti Container (for all dynamic falling/rising elements) -->
+    <div id="confetti-container" class="fixed inset-0 overflow-hidden pointer-events-none z-50"></div>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="hero-section min-h-screen flex flex-col items-center justify-center text-center px-6 py-16 md:py-0 relative overflow-hidden">
+            <div class="max-w-4xl mx-auto bg-white bg-opacity-90 p-8 md:p-12 rounded-lg shadow-xl animate-fade-in-up">
+                <p class="text-3xl md:text-4xl text-gray-700 mb-4">Hold Up! It's Someone's Birthday!</p>
+                <h1 class="text-7xl md:text-9xl font-extrabold text-pink-600 mb-6 leading-tight drop-shadow-lg animate-bounce-in">
+                    Namrata!
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-800 mb-8 max-w-2xl mx-auto">
+                    To our favorite human who somehow manages to juggle a UG degree, master chef duties, and still put up with us... Wishing you a day filled with joy, laughter, delicious food, and all the love you deserve (and maybe a few friendly roasts)!
+                </p>
+                <a href="#about-namrata" class="inline-block bg-pink-600 text-white text-lg font-medium px-8 py-4 rounded-full hover:bg-pink-700 transition duration-300 ease-in-out transform hover:scale-105 shadow-lg">
+                    Discover More Surprises (and maybe some secrets!)
+                </a>
+            </div>
+        </section>
+
+        <!-- About Namrata Section -->
+        <section id="about-namrata" class="py-16 md:py-24 container mx-auto px-6 max-w-6xl">
+            <h2 class="text-5xl md:text-6xl font-bold text-center text-pink-700 mb-12">Meet the Legend: Namrata!</h2>
+            <div class="flex flex-col md:flex-row items-center gap-12 bg-white p-8 rounded-lg shadow-lg">
+                <!-- About Image -->
+                <div class="md:w-1/2 flex justify-center">
+                    <!-- Namrata's photo from user's upload -->
+                    <img src="photos\profile.jpeg" alt="Namrata's Photo" class="rounded-full shadow-xl w-full max-w-sm md:max-w-md object-cover transform transition-transform duration-500 hover:scale-105 border-4 border-pink-300">
+                </div>
+                <!-- About Content -->
+                <div class="md:w-1/2 text-center md:text-left">
+                    <p class="text-gray-700 text-lg leading-relaxed mb-4">
+                        Hi ahe aamchi ladki, sugaran, mehanati, backchod, ghondas ani sglyat important mand Namrata!!
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cooking Corner Section -->
+        <section id="cooking-corner" class="py-16 md:py-24 bg-red-50">
+            <div class="container mx-auto px-6 max-w-6xl">
+                <h2 class="text-5xl md:text-6xl font-bold text-center text-red-700 mb-12">Namrata's Kitchen: Enter at Your Own Risk (of Deliciousness!)</h2>
+                <div class="bg-white p-8 rounded-lg shadow-lg flex flex-col md:flex-row items-center gap-8">
+                    <div class="md:w-1/2">
+                        <!-- Namrata's cooking photo from user's upload -->
+                        <img src="photos\food.jpeg" alt="Delicious Food" class="rounded-lg shadow-md w-full object-cover">
+                    </div>
+                    <div class="md:w-1/2 text-center md:text-left">
+                        <p class="text-gray-700 text-lg leading-relaxed mb-4">
+                            मिठ्ठा परिवाराची होणारी भावी सून, जिचे स्वप्न आहे हाऊसवाईफ बनण्याचे, हिच्या हाताचे कोथिंबीर वडी खाऊन मी झालोय पागल! लहान वयात स्वयंपाक या अति अवघड विषयात टॉप करणारी कुमारी नम्रता बानसोडे, द मास्टर शेफ!
+                            <br><b>Hotel Namrata, Nad karti kay, Yavach Lagtay, Hotellll Namrataaaa</b>
+                        </p>
+                        <!-- Add a button or link to a favorite recipe placeholder later -->
+                        <div class="mt-6">
+                            <a href="#" class="inline-block bg-orange-600 text-white text-lg font-medium px-6 py-3 rounded-full hover:bg-orange-700 transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
+                                Mala pn Swayapak shikav na
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Photo Gallery Section -->
+        <section id="photo-gallery" class="py-16 md:py-24 container mx-auto px-6 max-w-7xl">
+            <h2 class="text-5xl md:text-6xl font-bold text-center text-pink-700 mb-12">Memories & Smiles (aka Photographic Evidence)</h2>
+            <p class="text-center text-lg text-gray-700 mb-8">
+                Warning: These photos contain undeniable proof of Namrata's awesomeness... and maybe a few of us looking slightly less awesome next to her. Enjoy!
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- All 7 User-Uploaded Photos -->
+                <div class="photo-item bg-white rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105 cursor-pointer" data-full-img="/download/WhatsApp Image 2025-06-09 at 10.14.12 PM.jpg">
+                    <img src="photos/us.jpeg" alt="Namrata Photo 1" class="w-full h-64 object-cover">
+                    <div class="p-4">
+                        <p class="text-gray-600 text-sm">Haayeeee kitta sundar dikhra mai :-) </p>
+                    </div>
+                </div>
+                <div class="photo-item bg-white rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105 cursor-pointer" data-full-img="/download/WhatsApp Image 2025-06-09 at 10.14.14 PM.jpg">
+                    <img src="photos/dupatta.jpeg" alt="Namrata Photo 2" class="w-full h-64 object-cover">
+                    <div class="p-4">
+                        <p class="text-gray-600 text-sm">Lal duppata ud gaya tere hawa ke zoke se</p>
+                    </div>
+                </div>
+                <div class="photo-item bg-white rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105 cursor-pointer" data-full-img="/download/WhatsApp Image 2025-06-09 at 10.14.14 PM (1).jpg">
+                    <img src="photos/heroine.jpeg" alt="Namrata Photo 3" class="w-full h-64 object-cover">
+                    <div class="p-4">
+                        <p class="text-gray-600 text-sm">Mai heroine huuuu</p>
+                    </div>
+                </div>
+                <div class="photo-item bg-white rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105 cursor-pointer" data-full-img="/download/WhatsApp Image 2025-06-09 at 10.14.15 PM.jpg">
+                    <img src="photos/model.jpeg" alt="Namrata Photo 4" class="w-full h-64 object-cover">
+                    <div class="p-4">
+                        <p class="text-gray-600 text-sm">Ye ladaki, Aankh mareee Aankh mare</p>
+                    </div>
+                </div>
+                <div class="photo-item bg-white rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105 cursor-pointer" data-full-img="/download/WhatsApp Image 2025-06-09 at 10.19.01 PM.jpeg">
+                    <img src="photos/mand.jpeg" alt="Namrata Photo 5" class="w-full h-64 object-cover">
+                    <div class="p-4">
+                        <p class="text-gray-600 text-sm">Me Ahe Mand Nammu!</p>
+                    </div>
+                </div>
+                <div class="photo-item bg-white rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105 cursor-pointer" data-full-img="/download/WhatsApp Image 2025-06-09 at 10.19.02 PM.jpeg">
+                    <img src="photos/WhatsApp Image 2025-06-09 at 10.19.00 PM (1).jpeg" alt="Namrata Photo 6" class="w-full h-64 object-cover">
+                    <div class="p-4">
+                        <p class="text-gray-600 text-sm">I Am Cutie Pie!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Light Up Your Day! Section -->
+        <section id="cake-surprise" class="py-16 md:py-24 bg-purple-50 flex flex-col items-center justify-center text-center px-6">
+            <h2 class="text-5xl md:text-6xl font-bold text-center text-purple-700 mb-12">Time to Light Up Your Day, Namrata!</h2>
+            <p class="text-center text-xl text-gray-700 mb-8 max-w-2xl">
+                Ready for a little magic? To light the candles on your virtual cake, you need to say a special 'ukhana' for **Raghu**! Type it below and hit the button. No pressure, but the cake's waiting... 😉
+            </p>
+
+            <!-- Cake and Candles Container -->
+            <div class="candle-wrapper mb-12 mt-8">
+                <!-- Cake Image -->
+                <img src="photos/cake.webp" alt="Birthday Cake" class="cake-image" onerror="this.onerror=null;this.src='https://placehold.co/1200x750/FFD1DC/FF69B4?text=CAKE+IMAGE+UNAVAILABLE';">
+
+                <!-- Candles positioned absolutely over the image -->
+                <!-- Adjusted 'top' and 'left' values for the new cake image. Fine-tune if needed. -->
+                <div class="candle absolute" style="top: 28%; left: 30%; transform: translate(-50%, -50%);">
+                    <div class="wick"></div>
+                    <div class="flame" id="flame-1"></div>
+                </div>
+                <div class="candle absolute" style="top: 25%; left: 50%; transform: translate(-50%, -50%);">
+                    <div class="wick"></div>
+                    <div class="flame" id="flame-2"></div>
+                </div>
+                <div class="candle absolute" style="top: 28%; left: 70%; transform: translate(-50%, -50%);">
+                    <div class="wick"></div>
+                    <div class="flame" id="flame-3"></div>
+                </div>
+            </div>
+
+            <!-- Ukhana Input Field -->
+            <div class="w-full max-w-md bg-white p-8 pt-10 mt-4 rounded-lg shadow-xl border border-purple-200 relative overflow-hidden">
+                <div class="mb-4">
+                    <label for="ukhana-input" class="block text-gray-700 text-sm font-medium mb-2">Your Special Ukhana for Raghu:</label>
+                    <input type="text" id="ukhana-input" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200 ease-in-out" placeholder="E.g., 'Navachi ahe majhya Raghu, aata tumhi kara suru!'">
+                </div>
+                <!-- Light Candles button on its own line -->
+                <button id="light-candles-btn" class="w-full bg-purple-600 text-white text-lg font-medium px-8 py-4 rounded-md hover:bg-purple-700 transition duration-300 ease-in-out transform hover:scale-105 shadow-lg mb-4">
+                    Light the Candles! ✨
+                </button>
+                <!-- Stop Song button removed -->
+                <button id="get-ukhana-hint-btn" class="w-full bg-yellow-500 text-white text-lg font-medium px-8 py-4 rounded-md hover:bg-yellow-600 transition duration-300 ease-in-out transform hover:scale-105 shadow-lg">
+                    Generate Ukhana Hint ✨
+                    <div id="ukhana-hint-spinner" class="llm-spinner hidden"></div>
+                </button>
+                <div id="ukhana-message" class="mt-4 p-3 rounded-md text-center hidden"></div>
+                <div id="ukhana-hint-output" class="mt-4 p-3 bg-gray-100 text-gray-700 rounded-md text-center hidden">
+                    <!-- Ukhana hint will appear here -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-pink-700 text-white py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p>Happy Birthday, Namrata! With love from Akash</p>
+        </div>
+    </footer>
+
+    <!-- Image Modal Structure (for photos) -->
+    <div id="image-modal" class="modal">
+        <span class="modal-close" id="close-modal">&times;</span>
+        <div class="spinner" id="modal-spinner"></div>
+        <img class="modal-content" id="modal-image" alt="Full size photo">
+    </div>
+
+    <!-- Video Modal Structure (for YouTube video) -->
+    <div id="video-modal" class="modal">
+        <span class="modal-close" id="close-video-modal">&times;</span>
+        <div class="video-container">
+            <iframe id="youtube-player" width="560" height="315" src="" frameborder="0" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
+        </div>
+    </div>
+
+
+    <script>
+        // No standalone audio object anymore, replaced by YouTube iframe.
+
+        // JavaScript for Confetti Animation (retained for hero section)
+        function createConfetti() {
+            const confettiContainer = document.getElementById('confetti-container');
+            const colors = ['#FFD700', '#FF69B4', '#FFA500', '#ADFF2F', '#87CEEB']; // Gold, Hot Pink, Orange, GreenYellow, SkyBlue
+
+            for (let i = 0; i < 50; i++) { // Generate 50 confetti pieces
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti-piece');
+                confetti.style.left = Math.random() * 100 + 'vw'; // Random horizontal position
+                confetti.style.animationDelay = Math.random() * 3 + 's'; // Random delay
+                confetti.style.animationDuration = (Math.random() * 2 + 3) + 's'; // Random duration
+                confetti.style.setProperty('--confetti-color', colors[Math.floor(Math.random() * colors.length)]);
+                confettiContainer.appendChild(confetti);
+            }
+        }
+
+        // Trigger confetti on page load
+        window.onload = createConfetti;
+
+
+        // JavaScript for Image Modal (for photo gallery)
+        const photoItems = document.querySelectorAll('.photo-item');
+        const imageModal = document.getElementById('image-modal');
+        const modalImage = document.getElementById('modal-image');
+        const closeModal = document.getElementById('close-modal');
+        const modalSpinner = document.getElementById('modal-spinner');
+
+        // Function to show spinner and hide image
+        function showSpinner() {
+            modalSpinner.style.display = 'block';
+            modalImage.style.display = 'none';
+        }
+
+        // Function to hide spinner and show image
+        function hideSpinner() {
+            modalSpinner.style.display = 'none';
+            modalImage.style.display = 'block';
+        }
+
+        // Add click event listeners to all photo items
+        photoItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const fullImgSrc = item.getAttribute('data-full-img');
+                imageModal.style.display = 'flex'; // Use flex to center content
+                showSpinner(); // Show spinner immediately
+
+                // Load image
+                const img = new Image();
+                img.onload = () => {
+                    modalImage.src = fullImgSrc;
+                    hideSpinner(); // Hide spinner when image is loaded
+                };
+                img.onerror = () => {
+                    console.error("चित्र लोड करण्यात समस्या आली. (Failed to load image.)", fullImgSrc); // Marathi error
+                    modalImage.src = 'https://placehold.co/1200x800/FF0000/FFFFFF?text=IMAGE+ERROR'; // Fallback
+                    hideSpinner();
+                };
+                img.src = fullImgSrc;
+            });
+        });
+
+        // Close modal when close button is clicked
+        closeModal.addEventListener('click', () => {
+            imageModal.style.display = 'none';
+            modalImage.src = ''; // Clear image source
+        });
+
+        // Close modal when clicking outside the image
+        imageModal.addEventListener('click', (event) => {
+            if (event.target === imageModal) {
+                imageModal.style.display = 'none';
+                modalImage.src = ''; // Clear image source
+            }
+        });
+
+        // Add a simple onerror handler for the img tags directly in HTML to prevent broken image icons
+        document.querySelectorAll('img').forEach(img => {
+            img.onerror = function() {
+                this.onerror=null; // Prevent infinite loop if fallback also fails
+                this.src='https://placehold.co/600x400/CCCCCC/666666?text=Image+Unavailable'; // Fallback placeholder
+            };
+        });
+
+        // JavaScript for Candle Lighting with Ukhana and YouTube Video
+        const ukhanaInput = document.getElementById('ukhana-input');
+        const lightCandlesBtn = document.getElementById('light-candles-btn');
+        const ukhanaMessage = document.getElementById('ukhana-message');
+        const flames = document.querySelectorAll('.flame');
+        const celebrationContainer = document.getElementById('confetti-container'); // Re-using for dynamic elements
+
+        // Video Modal elements
+        const videoModal = document.getElementById('video-modal');
+        const closeVideoModalBtn = document.getElementById('close-video-modal');
+        const youtubePlayer = document.getElementById('youtube-player');
+        const youtubeVideoId = 'YDq0qDHV4qw'; // ID from your YouTube Shorts link
+
+        lightCandlesBtn.addEventListener('click', () => {
+            const ukhanaText = ukhanaInput.value.toLowerCase(); // Convert to lowercase for case-insensitive check
+
+            if (ukhanaText.includes('raghu')) {
+                // Light the candles!
+                flames.forEach(flame => {
+                    flame.classList.add('lit');
+                });
+                ukhanaMessage.classList.remove('hidden', 'bg-red-100', 'text-red-700');
+                ukhanaMessage.classList.add('bg-green-100', 'text-green-700');
+                ukhanaMessage.textContent = "🥳 Happy Birthday! The candles are lit! Time to make a wish, Namrata! 🎉";
+                ukhanaMessage.innerHTML += "<p class='mt-2'>हे व्हिडिओ खास तुमच्यासाठी! (This video is specially for you!)</p>"; // Marathi touch, adjusted for video
+
+                // Trigger celebration animations (firecrackers and strips)
+                launchCelebration();
+
+                // Show and play YouTube video after 5-second delay
+                setTimeout(() => {
+                    youtubePlayer.src = `https://www.youtube.com/embed/${youtubeVideoId}?autoplay=1&controls=1&loop=1&playlist=${youtubeVideoId}&modestbranding=1&rel=0`;
+                    videoModal.style.display = 'flex'; // Show the video modal
+                }, 5000); // 5-second delay
+
+                // Optional: Disable light candles button and ukhana input after success
+                lightCandlesBtn.disabled = true;
+                ukhanaInput.disabled = true;
+
+            } else {
+                // Not the right ukhana
+                ukhanaMessage.classList.remove('hidden', 'bg-green-100', 'text-red-700');
+                ukhanaMessage.classList.add('bg-red-100', 'text-red-700');
+                ukhanaMessage.textContent = "Oops! That's not quite right. Are you sure you included the *special* name? 😉";
+            }
+
+            // Clear the input after checking
+            ukhanaInput.value = '';
+
+            // Hide the message after a few seconds
+            setTimeout(() => {
+                ukhanaMessage.classList.add('hidden');
+            }, 7000); // Give her time to read the success message
+        });
+
+        // Event listener for closing the video modal
+        closeVideoModalBtn.addEventListener('click', () => {
+            youtubePlayer.src = ""; // Stop the video by clearing its source
+            videoModal.style.display = 'none'; // Hide the video modal
+        });
+
+
+        // Function to launch dynamic balloons/strips from sides (improved)
+        function launchCelebration() {
+            const colors = ['#FFD700', '#FF69B4', '#FFA500', '#ADFF2F', '#87CEEB', '#00FFFF', '#FF00FF', '#FF1493', '#7CFC00']; // More vibrant colors
+            const numElements = 60; // More elements for a richer effect
+
+            for (let i = 0; i < numElements; i++) {
+                const element = document.createElement('div');
+                element.classList.add('celebration-element');
+                const isBalloon = Math.random() > 0.4; // Slightly more balloons
+
+                if (isBalloon) {
+                    element.classList.add('balloon-piece');
+                    element.style.width = (Math.random() * 25 + 15) + 'px'; // Larger balloons
+                    element.style.height = (Math.random() * 35 + 25) + 'px';
+                    element.style.borderRadius = '50%';
+                    element.style.background = `radial-gradient(circle at 30% 30%, ${colors[Math.floor(Math.random() * colors.length)]}, ${colors[Math.floor(Math.random() * colors.length)]}80)`; // Gradient for depth
+                } else {
+                    element.classList.add('strip-piece');
+                    element.style.width = (Math.random() * 8 + 4) + 'px'; // Wider strips
+                    element.style.height = (Math.random() * 80 + 40) + 'px'; // Longer strips
+                    element.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    element.style.transformOrigin = 'bottom center'; // Pivot point for rotation
+                }
+
+                element.style.opacity = 0; // Start hidden
+
+                // Randomize starting side and position
+                const startFromLeft = Math.random() > 0.5;
+                if (startFromLeft) {
+                    element.style.left = (Math.random() * 20) + 'vw'; // Start near left edge, more varied
+                } else {
+                    element.style.right = (Math.random() * 20) + 'vw'; // Start near right edge, more varied
+                }
+                element.style.bottom = '-100px'; // Start off-screen below
+
+                celebrationContainer.appendChild(element);
+
+                // Animate using setTimeout to trigger CSS transition
+                setTimeout(() => {
+                    element.style.opacity = 1;
+                    const finalY = Math.random() * 100 + 70; // Higher reach
+                    const finalX = Math.random() * 120 - 60; // Wider horizontal spread
+                    const rotation = Math.random() * 1080 - 540; // More rotation
+
+                    element.style.transform = `translateY(-${finalY}vh) translateX(${finalX}px) rotate(${rotation}deg)`;
+                    element.style.transitionDuration = (Math.random() * 5 + 4) + 's'; // Longer duration for slower, graceful ascent
+                    element.style.transitionTimingFunction = 'ease-out';
+
+                    // Remove element after animation to prevent DOM clutter
+                    setTimeout(() => {
+                        element.remove();
+                    }, (parseFloat(element.style.transitionDuration) * 1000) + 500); // Wait for transition + buffer
+                }, Math.random() * 200); // Small random delay for staggered effect
+            }
+        }
+
+        // Gemini API Call Function
+        async function callGeminiAPI(prompt, outputElement, spinnerElement) {
+            outputElement.classList.add('hidden'); // Hide previous output
+            spinnerElement.classList.remove('hidden'); // Show spinner
+
+            try {
+                let chatHistory = [];
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                const payload = { contents: chatHistory };
+                const apiKey = ""; // Canvas will automatically provide the API key
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    outputElement.textContent = text;
+                    outputElement.classList.remove('hidden');
+                } else {
+                    outputElement.textContent = "Sorry, couldn't generate a message right now. Please try again!";
+                    outputElement.classList.remove('hidden');
+                    console.error("Gemini API returned an unexpected structure:", result);
+                }
+            } catch (error) {
+                outputElement.textContent = "An error occurred while fetching the message. Please try again.";
+                outputElement.classList.remove('hidden');
+                console.error("Error calling Gemini API:", error);
+            } finally {
+                spinnerElement.classList.add('hidden'); // Hide spinner
+            }
+        }
+
+        // Ukhana Hint Generator
+        const getUkhanaHintBtn = document.getElementById('get-ukhana-hint-btn');
+        const ukhanaHintOutput = document.getElementById('ukhana-hint-output');
+        const ukhanaHintSpinner = document.getElementById('ukhana-hint-spinner');
+
+        getUkhanaHintBtn.addEventListener('click', async () => {
+            const prompt = "Generate a funny, playful Maharashtrian ukhana for a girl to take her boyfriend's name, Raghu. Make sure it includes the name 'Raghu'. Keep it short and sweet, no explanations. Example: 'Navachi ahe majhya Raghu, aata tumhi kara suru!'";
+            await callGeminiAPI(prompt, ukhanaHintOutput, ukhanaHintSpinner);
+        });
+    </script>
+</body>
+</html>
