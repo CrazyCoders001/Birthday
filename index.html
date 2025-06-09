@@ -408,7 +408,7 @@
             <div class="w-full max-w-md bg-white p-8 pt-10 mt-4 rounded-lg shadow-xl border border-purple-200 relative overflow-hidden">
                 <div class="mb-4">
                     <label for="ukhana-input" class="block text-gray-700 text-sm font-medium mb-2">Your Special Ukhana for Raghu:</label>
-                    <input type="text" id="ukhana-input" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200 ease-in-out" placeholder="E.g., 'Navachi ahe majhya Raghu, aata tumhi kara suru!'">
+                    <input type="text" id="ukhana-input" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200 ease-in-out" placeholder="E.g., 'bf astana mnle Raghu, pn lagna nater aho ch'">
                 </div>
                 <!-- Light Candles button on its own line -->
                 <button id="light-candles-btn" class="w-full bg-purple-600 text-white text-lg font-medium px-8 py-4 rounded-md hover:bg-purple-700 transition duration-300 ease-in-out transform hover:scale-105 shadow-lg mb-4">
@@ -701,7 +701,7 @@
         const ukhanaHintSpinner = document.getElementById('ukhana-hint-spinner');
 
         getUkhanaHintBtn.addEventListener('click', async () => {
-            const prompt = "Generate a funny, playful Maharashtrian ukhana for a girl to take her boyfriend's name, Raghu. Make sure it includes the name 'Raghu'. Keep it short and sweet, no explanations. Example: 'Navachi ahe majhya Raghu, aata tumhi kara suru!'";
+            const prompt = "Generate a funny, playful Maharashtrian ukhana for a girl to take her boyfriend's name, Raghu. Make sure it includes the name 'Raghu'. Keep it short and sweet, no explanations. Example: 'bf astana mnle Raghu, pn lagna nater aho ch manayach'";
             await callGeminiAPI(prompt, ukhanaHintOutput, ukhanaHintSpinner);
         });
     </script>
